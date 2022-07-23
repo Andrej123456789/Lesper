@@ -15,4 +15,4 @@ run:
 	./$(BIN) Lesper/test.lesper
 
 clean:
-	rm -rf uno $(BIN) *.o
+	rm -rf $(BIN) *.o

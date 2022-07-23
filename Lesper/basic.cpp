@@ -1,5 +1,7 @@
 #include "basic.hpp"
 
+Eval eval;
+
 std::string open_file(std::string filename)
 {
     std::string ret;
@@ -126,53 +128,29 @@ void lex(std::string filecontents, struct keywords* k)
 
 std::string evalExpression(std::string expr)
 {
-    expr = "," + expr;
+    std::string ret = "";
 
-    size_t i = expr.length() - 1;
-    std::string num = "";
-    std::string temp = "";
-
-    while (i >= 0)
+    if (containsSomething(expr, parentheses) && containsSpecificOperators(expr, 1) && containsSomething(expr, numbers))
     {
-        temp = expr[i];
-
-        if (containsSomething(temp, operators) || temp == "%")
-        {
-            std::reverse(num.begin(), num.end());
-            num_stack.push_back(num);
-            num_stack.push_back(temp);
-            num = "";
-        }
-
-        else if (temp == ",")
-        {
-            std::reverse(num.begin(), num.end());
-            num_stack.push_back(num);
-            num = "";
-        }
-
-        else
-        {
-            num += expr[i];
-        }
-
-        if (i != 0)
-        {
-            i--;
-            temp = "";
-        }
-
-        else
-        {
-            temp = "";
-            break;
-        }
+        eval.Parentheses(expr, numbers, operators);
     }
 
-    for (auto x : num_stack)
+    else if (containsSpecificOperators(expr, 1) && containsSomething(expr, numbers))
     {
-        std::cout << x << std::endl;
+        eval.Operators(expr, numbers, operators);
     }
+
+    else if (containsSomething(expr, numbers))
+    {
+        std::cout << eval.Numbers(expr, numbers, operators) << std::endl;
+    }
+
+    else
+    {
+        ret = "Error: Invalid expression";
+    }
+
+    return ret;
 }
 
 void print(std::string str)
