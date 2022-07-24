@@ -65,6 +65,18 @@
         "filesystem": "cpp",
         "__bit_reference": "cpp",
         "__hash_table": "cpp",
-        "__split_buffer": "cpp"
+        "__split_buffer": "cpp",
+        "__atomic": "cpp",
+        "__debug": "cpp",
+        "__functional_base": "cpp",
+        "__locale": "cpp",
+        "__string": "cpp",
+        "__tuple": "cpp",
+        "ios": "cpp",
+        "locale": "cpp",
+        "complex": "cpp",
+        "map": "cpp",
+        "cinttypes": "cpp",
+        "__tree": "cpp"
     }
 }

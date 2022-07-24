@@ -5,9 +5,6 @@
 #include <vector>
 #include <algorithm>
 
-#include <boost/range/combine.hpp>
-#include <boost/tuple/tuple.hpp>
-
 class Eval
 {
     public:

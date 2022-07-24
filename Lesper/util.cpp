@@ -16,48 +16,60 @@ std::string Eval::Numbers(std::string expr, std::vector<std::string> numbers, st
     std::vector<int> num;
     std::size_t temp;
 
-    for (std::size_t i = 0; i < expr.size(); i++)
+    num.push_back(0);
+    pos.push_back(0);
+    for (std::size_t i = 0; i < expr.length(); i++)
     {
-        temp = expr.find("+");
-        if (temp != std::string::npos)
+        if (containsSomething(expr.substr(i, 1), numbers))
         {
+            temp = i;
+            while (containsSomething(expr.substr(temp, 1), numbers))
+            {
+                temp++;
+            }
             pos.push_back(temp);
-        }
-
-        temp = expr.find("-");
-        if (temp != std::string::npos)
-        {
-            pos.push_back(temp);
-        }
-
-        else
-        {
-            throw "Error: No operators found";
+            num.push_back(std::stoi(expr.substr(i, temp - i)));
         }
     }
-    pos.pop_back();
-    pos.push_back(expr.length());
 
-    num.push_back(stoi(expr.substr(0, pos[0])));
-    num.push_back(stoi(expr.substr(pos[0] + 1, pos[1])));
-
-    for (std::size_t i = 0; i < num.size(); i+=2)
+    for (std::size_t i = 1; i < num.size(); i++)
     {
-        switch (expr.at(pos[0]))
+        if (num[i] > 9)
+        {
+            std::vector<int>::iterator a = num.begin();
+            a += i * 2;
+            num.erase(a);
+
+            std::vector<std::size_t>::iterator b = pos.begin();
+            b += i * 2;
+            pos.erase(b);
+        }
+    }
+
+    std::vector<int>::iterator c = num.begin();
+    num.erase(c);
+    std::vector<std::size_t>::iterator d = pos.begin();
+    pos.erase(d);
+    
+    int number = num[0];
+    for (std::size_t i = 0; i < pos.size() - 1; i++)
+    {
+        switch (expr.at(pos[i]))
         {
             case '+':
-                ret = std::to_string(num[i] + num[i + 1]);
+                number += num[i + 1];
                 break;
 
             case '-':
-                ret = std::to_string(num[i] - num[i + 1]);
+                number -= num[i + 1];
                 break;
             
             default:
                 break;
         }
     }
-
+    
+    this->ret = std::to_string(number);
     return ret;
 }
 
