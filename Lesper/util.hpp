@@ -8,17 +8,18 @@
 class Eval
 {
     public:
-        std::string Parentheses(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators);
-        std::string Operators(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators);
-        std::string Numbers(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators);
+        Eval(std::string expr, std::vector<std::string> parentheses, std::vector<std::string> numbers, std::vector<std::string> operators);
+        ~Eval();
+
+        std::string ret = "";
 
     private:
-        std::string ret = "";
+        void Parentheses(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators);
+        void Operators(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators);
+        void Numbers(std::string expr, std::vector<std::string> numbers);
 };
 
 std::string lower(std::string str);
 bool containsSomething(std::string str, std::vector<std::string> vec);
 bool containsSpecificOperators(std::string str, int id);
 bool evaluateTokens(std::vector<std::string> tokens, int i, std::string str, int substr);
-
-extern Eval eval;

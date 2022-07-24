@@ -1,16 +1,44 @@
 #include "util.hpp"
 
-std::string Eval::Parentheses(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators)
+Eval::Eval(std::string expr, std::vector<std::string> parentheses, std::vector<std::string> numbers, std::vector<std::string> operators)
+{
+    if (containsSomething(expr, parentheses) && containsSpecificOperators(expr, 1) && containsSomething(expr, numbers))
+    {
+        Parentheses(expr, numbers, operators);
+    }
+
+    else if (containsSpecificOperators(expr, 1) && containsSomething(expr, numbers))
+    {
+        Operators(expr, numbers, operators);
+    }
+
+    else if (containsSomething(expr, numbers))
+    {
+        Numbers(expr, numbers);
+    }
+
+    else
+    {
+        ret = "Error: Invalid expression";
+    }
+}
+
+Eval::~Eval()
+{
+    ret = "";
+}
+
+void Eval::Parentheses(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators)
 {
     throw "Not implemented";
 }
 
-std::string Eval::Operators(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators)
+void Eval::Operators(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators)
 {
     throw "Not implemented";
 }
 
-std::string Eval::Numbers(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators)
+void Eval::Numbers(std::string expr, std::vector<std::string> numbers)
 {
     std::vector<std::size_t> pos;
     std::vector<int> num;
@@ -70,7 +98,6 @@ std::string Eval::Numbers(std::string expr, std::vector<std::string> numbers, st
     }
     
     this->ret = std::to_string(number);
-    return ret;
 }
 
 std::string lower(std::string str)

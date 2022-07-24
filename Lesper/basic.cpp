@@ -1,7 +1,5 @@
 #include "basic.hpp"
 
-Eval eval;
-
 std::string open_file(std::string filename)
 {
     std::string ret;
@@ -128,29 +126,9 @@ void lex(std::string filecontents, struct keywords* k)
 
 std::string evalExpression(std::string expr)
 {
-    std::string ret = "";
+    Eval eval = Eval(expr, parentheses, numbers, operators);
 
-    if (containsSomething(expr, parentheses) && containsSpecificOperators(expr, 1) && containsSomething(expr, numbers))
-    {
-        eval.Parentheses(expr, numbers, operators);
-    }
-
-    else if (containsSpecificOperators(expr, 1) && containsSomething(expr, numbers))
-    {
-        eval.Operators(expr, numbers, operators);
-    }
-
-    else if (containsSomething(expr, numbers))
-    {
-        std::cout << eval.Numbers(expr, numbers, operators) << std::endl;
-    }
-
-    else
-    {
-        ret = "Error: Invalid expression";
-    }
-
-    return ret;
+    return eval.ret;
 }
 
 void print(std::string str)
