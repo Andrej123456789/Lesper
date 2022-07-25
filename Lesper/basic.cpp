@@ -124,15 +124,25 @@ void lex(std::string filecontents, struct keywords* k)
     }
 }
 
-std::string evalExpression(std::string expr)
+float evalExpression(std::string expr)
 {
     Eval eval = Eval(expr, parentheses, numbers, operators);
 
-    return eval.ret;
+    if (!eval.error_state)
+    {
+        return eval.ret;
+    }
+
+    else
+    {
+        return atof("NaN");
+    }
 }
 
 void print(std::string str)
 {
+    float temp;
+
     if (str.substr(0, 6) == "STRING")
     {
         str = str.substr(7);
@@ -146,7 +156,8 @@ void print(std::string str)
 
     else if (str.substr(0, 4) == "EXPR")
     {
-        str = evalExpression(str.substr(5));
+        temp = evalExpression(str.substr(5));
+        str = (temp == static_cast<int>(temp)) ? std::to_string(static_cast<int>(temp)) : std::to_string(temp);
     }
 
     std::cout << str << std::endl;

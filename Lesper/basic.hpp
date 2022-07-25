@@ -20,7 +20,7 @@ struct keywords
 
 std::string open_file(std::string filename);
 void lex(std::string filecontents, struct keywords* k);
-std::string evalExpression(std::string expr);
+float evalExpression(std::string expr);
 void print(std::string str);
 void parse();
 void run(std::string path);

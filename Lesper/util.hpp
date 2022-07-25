@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include <algorithm>
 
 class Eval
@@ -11,7 +12,8 @@ class Eval
         Eval(std::string expr, std::vector<std::string> parentheses, std::vector<std::string> numbers, std::vector<std::string> operators);
         ~Eval();
 
-        std::string ret = "";
+        float ret;
+        bool error_state;
 
     private:
         void Parentheses(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators);

@@ -77,6 +77,10 @@
         "complex": "cpp",
         "map": "cpp",
         "cinttypes": "cpp",
-        "__tree": "cpp"
+        "__tree": "cpp",
+        "__functional_03": "cpp",
+        "__functional_base_03": "cpp",
+        "__node_handle": "cpp",
+        "queue": "cpp"
     }
 }
