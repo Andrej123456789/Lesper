@@ -9,16 +9,16 @@
 class Eval
 {
     public:
-        Eval(std::string expr, std::vector<std::string> parentheses, std::vector<std::string> numbers, std::vector<std::string> operators);
+        Eval(std::string expr, std::vector<std::string> parentheses, std::vector<std::string> numbers);
         ~Eval();
 
         float ret;
-        bool error_state;
+        bool error_state = false;
 
     private:
-        void Parentheses(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators);
-        void Operators(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators);
-        void Numbers(std::string expr, std::vector<std::string> numbers);
+        float Parentheses(std::string expr, std::vector<std::string> numbers);
+        float Operators(std::string expr, std::vector<std::string> numbers);
+        float Numbers(std::string expr, std::vector<std::string> numbers);
 };
 
 std::string lower(std::string str);

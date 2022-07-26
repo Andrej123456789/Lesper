@@ -1,20 +1,20 @@
 #include "util.hpp"
 
-Eval::Eval(std::string expr, std::vector<std::string> parentheses, std::vector<std::string> numbers, std::vector<std::string> operators)
+Eval::Eval(std::string expr, std::vector<std::string> parentheses, std::vector<std::string> numbers)
 {
     if (containsSomething(expr, parentheses) && containsSpecificOperators(expr, 1) && containsSomething(expr, numbers))
     {
-        Parentheses(expr, numbers, operators);
+        ret = Parentheses(expr, numbers);
     }
 
     else if (containsSpecificOperators(expr, 1) && containsSomething(expr, numbers))
     {
-        Operators(expr, numbers, operators);
+        ret = Operators(expr, numbers);
     }
 
     else if (containsSomething(expr, numbers))
     {
-        Numbers(expr, numbers);
+        ret = Numbers(expr, numbers);
     }
 
     else
@@ -27,15 +27,158 @@ Eval::Eval(std::string expr, std::vector<std::string> parentheses, std::vector<s
 Eval::~Eval()
 {
     ret = 0;
-    error_state = 1;
 }
 
-void Eval::Parentheses(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators)
+float Eval::Parentheses(std::string expr, std::vector<std::string> numbers)
 {
-    throw "Not implemented";
+    std::map<std::size_t, std::string> data;
+    std::vector<float> num;
+    std::size_t temp;
+    bool contains_additon_and_subtraction = false;
+    bool multiple_or_division = false;
+    bool contains_parentheses = false;
+    int muls_and_divs = 0;
+    int parentheses = 0;
+    float number;
+
+    num.push_back(0);
+    for (std::size_t i = 0; i < expr.length(); i++)
+    {
+        if (containsSomething(expr.substr(i, 1), numbers))
+        {
+            temp = i;
+            while (containsSomething(expr.substr(temp, 1), numbers))
+            {
+                temp++;
+            }
+
+            data.insert
+            (
+                {
+                    temp,
+                    expr.substr(temp, temp - i)
+                }
+            );
+            num.push_back(std::stof(expr.substr(i, temp - i)));
+        }
+    }
+    data.erase(std::prev(data.end()));
+
+    for (auto y : data)
+    {
+        int temp_pos;
+        std::string temp;
+        if (y.second == ")")
+        {
+            temp_pos = y.first;
+            size_t found = expr.find("(");
+            if (found != std::string::npos)
+            {
+                temp = expr.at(found);
+                auto data_pos = end(data);
+                data.insert
+                (
+                    {
+                        found,
+                        temp
+                    }
+                );
+            }
+        }
+    }
+
+    for (auto x : data)
+    {
+        if (x.second == "(" || x.second == ")")
+        {
+            contains_parentheses = true;
+            parentheses++;
+        }
+
+        if (x.second == "*" || x.second == "/")
+        {
+            multiple_or_division = true;
+            muls_and_divs++;
+        }
+
+        if (x.second == "+" || x.second == "-")
+        {
+            contains_additon_and_subtraction = true;
+        }
+    }
+
+    for (std::size_t i = 1; i < num.size(); i++)
+    {
+        if (num[i] > 9)
+        {
+            std::vector<float>::iterator a = num.begin();
+            a += i * 2;
+            num.erase(a);
+        }
+    }
+    std::vector<float>::iterator b = num.begin();
+    num.erase(b);
+
+    if (!contains_parentheses && !multiple_or_division && contains_additon_and_subtraction)
+    {
+        return Numbers(expr, numbers);
+    }
+
+    else if (multiple_or_division && !contains_parentheses && !contains_additon_and_subtraction)
+    {
+        return Operators(expr, numbers);
+    }
+
+    else if (multiple_or_division && contains_additon_and_subtraction && !contains_parentheses)
+    {
+        return Operators(expr, numbers);
+    }
+
+    else
+    {
+        std::vector<int> left, right;
+        std::vector<float> numbers_in_parantheses;
+        std::string temp;
+        float temp_num;
+        for (auto pos : data)
+        {
+            if (pos.second == "(")
+            {
+                left.push_back(pos.first);
+            }
+
+            else if (pos.second == ")")
+            {
+                right.push_back(pos.first);
+            }
+        }
+
+        temp = expr.substr(left[0], right[0] - left[0]);
+        std::string::iterator it = temp.begin();
+        temp.erase(it);
+
+        number = Operators(temp, numbers);
+
+        std::cout << expr << std::endl;
+
+        // check if there is a expr before the parentheses
+        if (left[0] > 0)
+        {
+            temp = expr.substr(0, left[0]);
+            temp += std::to_string(static_cast<int>(number));
+            number = Operators(temp, numbers);
+        }
+
+        else
+        {
+            std::cout << "TODO\n";
+        }
+    }
+
+    return number;
 }
 
-void Eval::Operators(std::string expr, std::vector<std::string> numbers, std::vector<std::string> operators)
+float Eval::Operators(std::string expr, std::vector<std::string> numbers)
 {
     std::map<std::size_t, std::string> data;
     std::vector<float> num;
@@ -96,22 +239,7 @@ void Eval::Operators(std::string expr, std::vector<std::string> numbers, std::ve
 
     if (!multiple_or_division && contains_additon_and_subtraction)
     {
-        for (auto pos : data)
-        {
-            switch (expr.at(pos.first))
-            {
-                case '+':
-                    number += std::stof(pos.second);
-                    break;
-
-                case '-':
-                    number -= std::stof(pos.second);
-                    break;
-                
-                default:
-                    break;
-            }
-        }
+        number = Numbers(expr, numbers);
     }
 
     else if (multiple_or_division && !contains_additon_and_subtraction)
@@ -202,10 +330,10 @@ void Eval::Operators(std::string expr, std::vector<std::string> numbers, std::ve
         }
     }
 
-    this->ret = number;
+    return number;
 }
 
-void Eval::Numbers(std::string expr, std::vector<std::string> numbers)
+float Eval::Numbers(std::string expr, std::vector<std::string> numbers)
 {
     std::vector<std::size_t> pos;
     std::vector<int> num;
@@ -264,7 +392,7 @@ void Eval::Numbers(std::string expr, std::vector<std::string> numbers)
         }
     }
     
-    (number >= 0) ? this->error_state = true : this->ret = number;
+    return number;
 }
 
 std::string lower(std::string str)

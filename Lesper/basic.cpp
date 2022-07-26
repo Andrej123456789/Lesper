@@ -126,16 +126,16 @@ void lex(std::string filecontents, struct keywords* k)
 
 float evalExpression(std::string expr)
 {
-    Eval eval = Eval(expr, parentheses, numbers, operators);
+    Eval eval = Eval(expr, parentheses, numbers);
 
-    if (!eval.error_state)
+    if (eval.error_state == true)
     {
-        return eval.ret;
+        return atof("Nan");
     }
 
     else
     {
-        return atof("NaN");
+        return eval.ret;
     }
 }
 
