@@ -1,5 +1,8 @@
 #include "util.hpp"
 
+#include <boost/range/combine.hpp>
+#include <boost/tuple/tuple.hpp>
+
 Eval::Eval(std::string expr, std::vector<std::string> parentheses, std::vector<std::string> numbers)
 {
     if (containsSomething(expr, parentheses) && containsSpecificOperators(expr, 1) && containsSomething(expr, numbers))
@@ -66,29 +69,32 @@ float Eval::Parentheses(std::string expr, std::vector<std::string> numbers)
 
     for (auto y : data)
     {
-        int temp_pos;
-        std::string temp;
-        if (y.second == ")")
+        std::string chr;
+        if (y.second.length() != 1)
         {
-            temp_pos = y.first;
-            size_t found = expr.find("(");
-            if (found != std::string::npos)
-            {
-                temp = expr.at(found);
-                auto data_pos = end(data);
-                data.insert
-                (
-                    {
-                        found,
-                        temp
-                    }
-                );
-            }
+            chr = y.second.substr(y.second.length() - 1);
+            y.second.pop_back();
+            data[y.first] = y.second;
+            data.insert({y.first + 1, chr});
+        }
+    }
+
+    std::size_t final_key;
+    for (auto it = data.begin(); it != data.end(); ++it)
+    {
+        final_key = it->first;
+    }
+
+    for (auto z : data)
+    {
+        if (z.first == final_key)
+        {
+            data.insert({z.first + 1, ")"});
         }
     }
 
     for (auto x : data)
-    {
+    {        
         if (x.second == "(" || x.second == ")")
         {
             contains_parentheses = true;
@@ -121,6 +127,7 @@ float Eval::Parentheses(std::string expr, std::vector<std::string> numbers)
 
     if (!contains_parentheses && !multiple_or_division && contains_additon_and_subtraction)
     {
+        std::cout << "here" << std::endl;
         return Numbers(expr, numbers);
     }
 
@@ -138,7 +145,7 @@ float Eval::Parentheses(std::string expr, std::vector<std::string> numbers)
     {
         std::vector<int> left, right;
         std::vector<float> numbers_in_parantheses;
-        std::string temp;
+        std::string expression;
         float temp_num;
         for (auto pos : data)
         {
@@ -153,25 +160,23 @@ float Eval::Parentheses(std::string expr, std::vector<std::string> numbers)
             }
         }
 
-        temp = expr.substr(left[0], right[0] - left[0]);
-        std::string::iterator it = temp.begin();
-        temp.erase(it);
+        expression = expr.substr(left[0], right[0] - 2);
+        std::string::iterator it = expression.begin();
+        expression.erase(it);
 
-        number = Operators(temp, numbers);
+        number = Operators(expression, numbers);
 
-        std::cout << expr << std::endl;
-
-        // check if there is a expr before the parentheses
-        if (left[0] > 0)
+        if (expr.substr(0, left[0]).length() != 0)
         {
-            temp = expr.substr(0, left[0]);
-            temp += std::to_string(static_cast<int>(number));
-            number = Operators(temp, numbers);
-        }
+            std::string chr = expr.substr(0, left[0]).substr(expr.substr(0, left[0]).length() - 1);
 
-        else
-        {
-            std::cout << "TODO\n";
+            expression = expr.substr(0, left[0]) + std::to_string(static_cast<int>(number));
+            std::string::iterator it = expression.begin(); it++; expression.erase(it); 
+            /*
+                we can't use only single digits numbers because `data` map crashes, solution is to
+                wait multiple-digits numbers
+            */
+            number = Operators(expression, numbers);
         }
     }
 
