@@ -110,6 +110,15 @@ void lex(std::string filecontents, struct keywords* k)
 
         else if (varstarted == 1)
         {
+            if (tok == "<" || tok == ">")
+            {
+                if (var != "")
+                {
+                    tokens.push_back("VAR:" + var);
+                    var = "";
+                    varstarted = 0;
+                }
+            }
             var += tok;
             tok = "";
         }
@@ -195,6 +204,11 @@ void print(std::string str)
         str = (temp == static_cast<int>(temp)) ? std::to_string(static_cast<int>(temp)) : std::to_string(temp);
     }
 
+    else
+    {
+        return;
+    }
+
     std::cout << str << std::endl;
 }
 
@@ -211,14 +225,33 @@ void assign(std::string varname, std::string varvalue)
     }
 }
 
-void parse()
+std::string get_variable(std::string varname, struct errors* error)
+{
+    varname = varname.substr(4);
+    for (auto x : symbols)
+    {
+        if (varname == x.first)
+        {
+            return x.second;
+        }
+
+        else
+        {
+            continue;
+        }
+    }
+
+    return error->undefined_variable;
+}
+
+void parse(struct errors* error)
 {
     std::string temp;
 
     size_t i = 0;
     while(i < tokens.size())
     {
-        if (evaluateTokens(tokens, i, "PRINT STRING", 6) || evaluateTokens(tokens, i, "PRINT NUM", 3) || evaluateTokens(tokens, i, "PRINT EXPR", 4))
+        if (evaluateTokens(tokens, i, "PRINT STRING", 6, 0) || evaluateTokens(tokens, i, "PRINT NUM", 3, 0) || evaluateTokens(tokens, i, "PRINT EXPR", 4, 0) || evaluateTokens(tokens, i, "PRINT VAR", 3, 0))
         {
             if (tokens[i + 1].substr(0, 6) == "STRING")
             {
@@ -235,31 +268,47 @@ void parse()
                 print(tokens[i + 1]);
             }
 
+            else if (tokens[i + 1].substr(0, 3) == "VAR")
+            {
+                print(get_variable(tokens[i + 1], error));
+            }
+
             i+=2;
         }
 
-        temp = tokens[i].substr(0, 3) + " " + tokens[i + 1] + " " + tokens[i + 2].substr(0, 6);
-        if (temp == "VAR EQUALS STRING")
+        else if (evaluateTokens(tokens, i, "VAR EQUALS STRING", 6, 1) || evaluateTokens(tokens, i, "VAR EQUALS NUM", 3, 1) || evaluateTokens(tokens, i, "VAR EQUALS EXPR", 4, 1))
         {
-            assign(tokens[i], tokens[i + 2]);
+            if (tokens[i + 2].substr(0, 6) == "STRING")
+            {
+                std::cout << "here" << std::endl;
+                assign(tokens[i], tokens[i + 2]);
+            }
+
+            else if (tokens[i + 2].substr(0, 3) == "NUM")
+            {
+                assign(tokens[i], tokens[i + 2]);
+            }
+
+            else if (tokens[i + 2].substr(0, 4) == "EXPR")
+            {
+                std::string tmp = "NUM:";
+                tmp += (evalExpression(tokens[i + 2].substr(5)) == static_cast<int>(evalExpression(tokens[i + 2].substr(5)))) ? std::to_string(static_cast<int>(evalExpression(tokens[i + 2].substr(5)))) : std::to_string(evalExpression(tokens[i + 2].substr(5)));
+                assign(tokens[i], tmp);
+            }
             i+=3;
         }
     }
-
-    for (auto x : symbols)
-    {
-        std::cout << x.first << ": " << x.second << std::endl;
-    }
-    std::cout << "--------------------" << std::endl;
 }
 
 void run(std::string path)
 {
     keywords* k = new keywords;
+    errors* error = new errors;
 
     std::string data = open_file(path);
     lex(data, k);
-    parse();
+    parse(error);
 
     delete k;
+    delete error;
 }

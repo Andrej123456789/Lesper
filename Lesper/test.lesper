@@ -1,3 +1,7 @@
-$VARIABLE = "Hello World"
-$var2 = "jabuka"
-$var2 = "test"
+$variable = 8 + 4
+print $variable
+
+$var = 8 + 6
+print $var
+
+print "apple"

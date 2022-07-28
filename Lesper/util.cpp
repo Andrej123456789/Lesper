@@ -458,9 +458,36 @@ bool containsSpecificOperators(std::string str, int id)
     }
 }
 
-bool evaluateTokens(std::vector<std::string> tokens, int i, std::string str, int substr)
+bool evaluateTokens(std::vector<std::string> tokens, int i, std::string str, int substr, int option)
 {
-    std::string temp = tokens[i] + " " + tokens[i + 1].substr(0, substr);
+    /* 
+    * Option list:
+    * 0 - printing tokens
+    * 1 - assigning tokens to variables
+    */
+
+   std::string temp;
+
+    if (option == 0)
+    {
+        temp = tokens[i] + " " + tokens[i + 1].substr(0, substr);
+    }
+
+    else if (option == 1 && str != "VAR EQUALS EXPR")
+    {
+        temp = tokens[i].substr(0, substr) + " " + tokens[i + 1] + " " + tokens[i + 2].substr(0, substr);
+    }
+
+    else if (option == 1 && str == "VAR EQUALS EXPR")
+    {
+        temp = tokens[i].substr(0, substr - 1) + " " + tokens[i + 1] + " " + tokens[i + 2].substr(0, substr);
+    }
+
+    else
+    {
+        std::cout << "Invalid option: " << option << "\n\n";
+        exit(0);
+    }
 
     if (temp == str)
     {

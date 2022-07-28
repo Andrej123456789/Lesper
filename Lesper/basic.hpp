@@ -22,10 +22,16 @@ struct keywords
     std::string variable = "$";
 };
 
+struct errors
+{
+    std::string undefined_variable = "Undefined variable!";
+};
+
 std::string open_file(std::string filename);
 void lex(std::string filecontents, struct keywords* k);
 float evalExpression(std::string expr);
 void print(std::string str);
 void assign(std::string varname, std::string varvalue);
-void parse();
+std::string get_variables(std::string varname, struct errors* error);
+void parse(struct errors* error);
 void run(std::string path);
