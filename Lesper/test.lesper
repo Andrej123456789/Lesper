@@ -1,1 +1,3 @@
-PRINT 11 + (2 + 6)
+$VARIABLE = "Hello World"
+$var2 = "jabuka"
+$var2 = "test"
