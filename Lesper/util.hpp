@@ -25,3 +25,4 @@ std::string lower(std::string str);
 bool containsSomething(std::string str, std::vector<std::string> vec);
 bool containsSpecificOperators(std::string str, int id);
 bool evaluateTokens(std::vector<std::string> tokens, int i, std::string str, int substr, int option);
+bool compare(std::string str, std::string str2);

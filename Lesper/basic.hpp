@@ -19,6 +19,7 @@ static std::map<std::string, std::string> symbols;
 struct keywords
 {
     std::string print = "PRINT";
+    std::string input = "INPUT";
     std::string variable = "$";
 };
 
@@ -33,5 +34,6 @@ float evalExpression(std::string expr);
 void print(std::string str);
 void assign(std::string varname, std::string varvalue);
 std::string get_variables(std::string varname, struct errors* error);
+void input(std::string str, std::string varname);
 void parse(struct errors* error);
 void run(std::string path);

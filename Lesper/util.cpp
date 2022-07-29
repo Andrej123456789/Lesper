@@ -499,3 +499,16 @@ bool evaluateTokens(std::vector<std::string> tokens, int i, std::string str, int
         return false;
     }
 }
+
+bool compare(std::string str, std::string str2)
+{
+    if (str == str2)
+    {
+        return true;
+    }
+
+    else
+    {
+        return false;
+    }
+}

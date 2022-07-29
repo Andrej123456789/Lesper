@@ -18,8 +18,9 @@ Small programming language made for easy porting to existing platforms (example:
 - [x] Part 8
 - [x] Part 9
 - [x] Part 10
-- [ ] Part 11
+- [x] Part 11
 - [ ] Part 12
+- [ ] Part 13
 ------------------------------------
 - [ ] Arguments
 - [ ] Easier porting

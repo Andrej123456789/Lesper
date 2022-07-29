@@ -129,6 +129,12 @@ void lex(std::string filecontents, struct keywords* k)
             tok = "";
         }
 
+        else if (tok == k->input || tok == lower(k->input))
+        {
+            tokens.push_back("INPUT");
+            tok = "";
+        }
+
         else if (containsSomething(tok, numbers))
         {
             expr += tok;
@@ -142,7 +148,7 @@ void lex(std::string filecontents, struct keywords* k)
             tok = "";
         }
 
-        else if (tok == "\"")
+        else if (tok == "\"" || tok == " \"")
         {
             if (state == 0)
             {
@@ -166,6 +172,12 @@ void lex(std::string filecontents, struct keywords* k)
             tok = "";
         }
     }
+
+    for (auto x : tokens)
+    {
+        std::cout << x << std::endl;
+    }
+    std::cout << "-------------------------" << std::endl << std::endl;
 }
 
 float evalExpression(std::string expr)
@@ -244,6 +256,17 @@ std::string get_variable(std::string varname, struct errors* error)
     return error->undefined_variable;
 }
 
+void input(std::string str, std::string varname)
+{
+    std::string i, j = "STRING:", finale;
+
+    std::cout << str << " ";
+    getline(std::cin, i);
+    i += " ";
+    finale += j + i;
+    symbols[varname] = finale;
+}
+
 void parse(struct errors* error)
 {
     std::string temp;
@@ -299,6 +322,12 @@ void parse(struct errors* error)
             {
                 assign(tokens[i], get_variable(tokens[i + 2], error));
             }
+            i+=3;
+        }
+
+        else if (compare(tokens[i] + " " + tokens[i + 1].substr(0, 6) + " " + tokens[i + 2].substr(0, 3), "INPUT STRING VAR"))
+        {
+            input(tokens[i + 1].substr(7), tokens[i + 2].substr(4));
             i+=3;
         }
     }
