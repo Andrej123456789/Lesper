@@ -1,7 +1,13 @@
 $variable = 8 + 4
 print $variable
 
+$variable = 9 + 4
+print $variable
+
 $var = 8 + 6
 print $var
+
+$var2 = $var
+print $var2
 
 print "apple"

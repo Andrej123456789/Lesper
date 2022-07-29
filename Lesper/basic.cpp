@@ -276,11 +276,10 @@ void parse(struct errors* error)
             i+=2;
         }
 
-        else if (evaluateTokens(tokens, i, "VAR EQUALS STRING", 6, 1) || evaluateTokens(tokens, i, "VAR EQUALS NUM", 3, 1) || evaluateTokens(tokens, i, "VAR EQUALS EXPR", 4, 1))
+        else if (evaluateTokens(tokens, i, "VAR EQUALS STRING", 6, 1) || evaluateTokens(tokens, i, "VAR EQUALS NUM", 3, 1) || evaluateTokens(tokens, i, "VAR EQUALS EXPR", 4, 1) || evaluateTokens(tokens, i, "VAR EQUALS VAR", 3, 1))
         {
             if (tokens[i + 2].substr(0, 6) == "STRING")
             {
-                std::cout << "here" << std::endl;
                 assign(tokens[i], tokens[i + 2]);
             }
 
@@ -294,6 +293,11 @@ void parse(struct errors* error)
                 std::string tmp = "NUM:";
                 tmp += (evalExpression(tokens[i + 2].substr(5)) == static_cast<int>(evalExpression(tokens[i + 2].substr(5)))) ? std::to_string(static_cast<int>(evalExpression(tokens[i + 2].substr(5)))) : std::to_string(evalExpression(tokens[i + 2].substr(5)));
                 assign(tokens[i], tmp);
+            }
+
+            else if (tokens[i + 2].substr(0, 3) == "VAR")
+            {
+                assign(tokens[i], get_variable(tokens[i + 2], error));
             }
             i+=3;
         }
