@@ -223,7 +223,7 @@ int lex(std::string filecontents, struct keywords* k)
 	}
 	std::cout << "-------------------------" << std::endl << std::endl;
 
-	return 1;
+	return 0;
 }
 
 float evalExpression(std::string expr)
@@ -320,6 +320,11 @@ void parse(struct errors* error)
 	size_t i = 0;
 	while(i < tokens.size())
 	{
+		if (tokens[i] == "ENDIF")
+		{
+			i++;
+		}
+
 		if (evaluateTokens(tokens, i, "PRINT STRING", 6, 0) || evaluateTokens(tokens, i, "PRINT NUM", 3, 0) || evaluateTokens(tokens, i, "PRINT EXPR", 4, 0) || evaluateTokens(tokens, i, "PRINT VAR", 3, 0))
 		{
 			if (tokens[i + 1].substr(0, 6) == "STRING")
@@ -375,6 +380,11 @@ void parse(struct errors* error)
 		{
 			input(tokens[i + 1].substr(7), tokens[i + 2].substr(4));
 			i+=3;
+		}
+
+		else if (compare(tokens[i] + " " + tokens[i + 1].substr(0, 3) + " " + tokens[i + 2] + " " + tokens[i + 3].substr(0, 3) + " " + tokens[i + 4], "IF NUM EQEQ NUM THEN"))
+		{
+			i+=5;
 		}
 	}
 }

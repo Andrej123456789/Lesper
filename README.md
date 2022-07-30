@@ -13,14 +13,14 @@ Small programming language made for easy porting to existing platforms (example:
 - [x] Part 3
 - [x] Part 4
 - [x] Part 5
-- [ ] Part 6 - `eval()`
+- [x] Part 6 - `eval()`
 - [x] Part 7
 - [x] Part 8
 - [x] Part 9
 - [x] Part 10
 - [x] Part 11
 - [x] Part 12
-- [ ] Part 13
+- [x] Part 13
 ------------------------------------
 - [ ] Arguments
 - [ ] Easier porting
