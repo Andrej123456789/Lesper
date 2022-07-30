@@ -20,6 +20,9 @@ struct keywords
 {
     std::string print = "PRINT";
     std::string input = "INPUT";
+	std::string if_key = "IF";
+	std::string endif = "ENDIF";
+	std::string then = "THEN";
     std::string variable = "$";
 };
 
@@ -29,7 +32,7 @@ struct errors
 };
 
 std::string open_file(std::string filename);
-void lex(std::string filecontents, struct keywords* k);
+int lex(std::string filecontents, struct keywords* k);
 float evalExpression(std::string expr);
 void print(std::string str);
 void assign(std::string varname, std::string varvalue);
