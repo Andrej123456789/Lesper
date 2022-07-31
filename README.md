@@ -25,6 +25,7 @@ Small programming language made for easy porting to existing platforms (example:
 - [ ] Arguments
 - [ ] Easier porting
 - [ ] `filesystem` module
+. [x] Interactive enviroment
 - [ ] modules
 ------------------------------------
 - [ ] `eval()` - float numbers

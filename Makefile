@@ -14,5 +14,11 @@ $(BIN) : $(OBJS)
 run:
 	./$(BIN) Lesper/test.lesper
 
+interactive:
+	./$(BIN) tmp.lesper
+
 clean:
+	rm -rf *.o Lesper/*.o
+
+full_clean:
 	rm -rf $(BIN) *.o Lesper/*.o

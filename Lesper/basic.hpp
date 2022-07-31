@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 #include <list>
 #include <map>
 #include <vector>
@@ -29,6 +30,7 @@ struct keywords
 struct errors
 {
     std::string undefined_variable = "Undefined variable!";
+    std::string wrong_file_extension = "Wrong file extension! Expected *.lesper!";
 };
 
 std::string open_file(std::string filename);

@@ -217,12 +217,6 @@ int lex(std::string filecontents, struct keywords* k)
 		}
 	}
 
-	for (auto x : tokens)
-	{
-		std::cout << x << std::endl;
-	}
-	std::cout << "-------------------------" << std::endl << std::endl;
-
 	return 0;
 }
 
@@ -320,6 +314,11 @@ void parse(struct errors* error)
 	size_t i = 0;
 	while(i < tokens.size())
 	{
+		if (i + 1 == tokens.size())
+		{
+			break;
+		}
+
 		if (tokens[i] == "ENDIF")
 		{
 			i++;
@@ -393,6 +392,12 @@ void run(std::string path)
 {
 	keywords* k = new keywords;
 	errors* error = new errors;
+
+	if (path.substr(path.size() - 7) != ".lesper")
+	{
+		std::cout << error->wrong_file_extension << std::endl;
+		exit(0);
+	}
 
 	std::string data = open_file(path);
 	int status = lex(data, k);
