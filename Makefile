@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -g
 OBJS = $(shell echo $(wildcard *.cpp) | sed 's/\.cpp/\.o/g')
 OBJS += $(shell echo $(wildcard Lesper/*.cpp) | sed 's/\.cpp/\.o/g')
-BIN = lesper
+BIN = executable/lesper
 
 all : $(BIN)
 

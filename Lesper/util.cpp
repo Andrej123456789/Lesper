@@ -1,8 +1,5 @@
 #include "util.hpp"
 
-#include <boost/range/combine.hpp>
-#include <boost/tuple/tuple.hpp>
-
 Eval::Eval(std::string expr, std::vector<std::string> parentheses, std::vector<std::string> numbers)
 {
     if (containsSomething(expr, parentheses) && containsSpecificOperators(expr, 1) && containsSomething(expr, numbers))
